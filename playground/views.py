@@ -24,14 +24,16 @@ def create_note(request):
     return render(request, "playground/hello.html", {"notes": notes})
 
 
+@login_required
 def delete_note(request, note_id):
     note = get_object_or_404(Note, id=note_id, user=request.user)
     note.delete()
     return redirect("home")
 
 
+@login_required
 def edit_note(request, note_id):
-    note = Note.objects.get(id=note_id, user=request.user)
+    note = get_object_or_404(Note, id=note_id, user=request.user)
 
     if request.method == "POST":
         new_title = request.POST.get("title")
