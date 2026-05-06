@@ -10,17 +10,15 @@ from django.shortcuts import get_object_or_404
 
 @login_required
 def create_note(request):
+    notes = Note.objects.filter(user=request.user).order_by("-id")
 
     if request.method == "POST":
+        content = request.POST.get("content")
 
-        if "title" in request.POST:
+        if content:
+            Note.objects.create(user=request.user, content=content)
 
-            title = request.POST.get("title")
-            Note.objects.create(title=title, user=request.user)
-            return redirect("home")
-        return render(request, "create.html")
-
-    notes = Note.objects.filter(user=request.user)
+            return redirect("/dashboard/")
     return render(request, "playground/hello.html", {"notes": notes})
 
 
@@ -28,19 +26,20 @@ def create_note(request):
 def delete_note(request, note_id):
     note = get_object_or_404(Note, id=note_id, user=request.user)
     note.delete()
-    return redirect("home")
+    return redirect("/dashboard/")
 
 
 @login_required
 def edit_note(request, note_id):
-    note = get_object_or_404(Note, id=note_id, user=request.user)
+    note = Note.objects.get(id=note_id, user=request.user)
 
     if request.method == "POST":
-        new_title = request.POST.get("title")
-        note.title = new_title
-        note.save()
-        return redirect("home")
+        new_content = request.POST.get("content")
 
+        if new_content:
+            note.content = new_content
+            note.save()
+        return redirect("/dashboard/")
     return render(request, "playground/edit.html", {"note": note})
 
 

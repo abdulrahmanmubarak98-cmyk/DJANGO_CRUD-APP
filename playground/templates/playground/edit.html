@@ -8,8 +8,11 @@
 <form method="POST">
     {% csrf_token %}
 
-    <input type="text" name="title" value="{{ note.title }}">
-        <button type="submit">Save</button>
+    <textarea name="content" class="form-control mb-2" rows="4">{{ note.content }}
+
+    </textarea>
+
+    <button type="submit" class="btn btn-success">Save</button>
 </form>
 
 {% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row">
+
+    <!-- 🌤 WEATHER CARD -->
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+
+                <h5 class="card-title">Weather</h5>
+
+                <form method="POST" class="mb-3">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" name="city" class="form-control" placeholder="Enter city">
+                        <button class="btn btn-primary" name="search_weather">Search</button>
+                    </div>
+                </form>
+
+                {% if temperature %}
+                    <h4>{{ city }}</h4>
+                    <p>{{ temperature }} °C</p>
+                    <p class="text-muted">{{ description }}</p>
+                {% endif %}
+
+                {% if error %}
+                    <p class="text-danger">{{ error }}</p>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 📝 NOTES CARD -->
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+
+                <h5 class="card-title">Notes</h5>
+
+                <form method="POST" class="mb-3">
+                    {% csrf_token %}
+                    <textarea name="content" class="form-control mb-2" rows="3" placeholder="Write a note..."></textarea>
+                    <button class="btn btn-success" name="add_note">Add Note</button>
+                </form>
+
+                {% for note in notes %}
+                    <div class="border rounded p-2 mb-2">
+                        <p class="mb-1">{{ note.content }}</p>
+
+                        <a href="{% url 'playground:edit_note' note.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'playground:delete_note' note.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+                {% empty %}
+                    <p class="text-muted">No notes yet</p>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- 📜 HISTORY CARD -->
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <h5 class="card-title">Search History</h5>
+
+        <ul class="list-group list-group-flush">
+            {% for item in history %}
+                <li class="list-group-item">
+                    {{ item.city }}
+                    <span class="text-muted small float-end">
+                        {{ item.searched_at|date:"M d, H:i" }}
+                    </span>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted">No history yet</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</div>
+
+{% endblock %}
