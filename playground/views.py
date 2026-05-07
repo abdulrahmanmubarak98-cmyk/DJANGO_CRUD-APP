@@ -52,7 +52,7 @@ def signup(request):
                 request, "Account created successfully. you can now log in. "
             )
 
-            return redirect("login")
+            return redirect("/dashboard/")
     else:
         form = UserCreationForm()
 

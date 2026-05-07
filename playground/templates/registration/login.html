@@ -3,7 +3,7 @@
 {% block content %}
 <h2>Login</h2>
 
-<p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+<p>Don't have an account? <a href="{% url 'playground:signup' %}">Sign up</a></p>
 
 <form method="POST">
     {% csrf_token %}
