@@ -24,11 +24,12 @@ from django.shortcuts import redirect
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.dashboard_view, name="home"),
-    path("", lambda request: redirect("dashboard")),
-    path("playground", include("playground.urls")),
+    # Homepage redirect
+    path("", lambda request: redirect("/accounts/login/")),
+    path("playground/", include("playground.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("weather/", include("weather.urls")),
+    # Dashboard
     path("dashboard/", views.dashboard_view, name="dashboard"),
 ]
 
